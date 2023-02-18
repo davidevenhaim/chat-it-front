@@ -1,12 +1,6 @@
-import { FC, useState } from 'react';
-import { StatusBar, StyleSheet, View, Button } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { useState } from 'react';
 import * as Google from 'expo-auth-session/providers/google';
 import GoogleSignInButton from '../Auth/GoogleSignIn';
-import Login from '../Auth/Login';
-import AppLogo from '../Shared/Logo';
 import LoginScreen from '../Auth/Login';
 import RegisterScreen from '../Auth/Register';
 import ForgetPasswordScreen from '../Auth/ForgetPassword';
@@ -51,16 +45,5 @@ const UnAuthScreen = () => {
         </>
     );
 }
-
-
-const styles = StyleSheet.create({
-    unAuthContainer: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        width: "100%",
-    },
-
-});
 
 export default UnAuthScreen

@@ -1,12 +1,12 @@
 import { Text, View } from 'react-native';
 
-const AddPostScreen = () => {
+const ChatScreen = () => {
 
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text>Add Post</Text>
+            <Text>All Posts</Text>
         </View>
     );
 }
 
-export default AddPostScreen
+export default ChatScreen

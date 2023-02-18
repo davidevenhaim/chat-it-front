@@ -1,18 +1,17 @@
-import { FC, useState, useEffect } from 'react';
-import { StatusBar, StyleSheet, Text, View, Image, TouchableOpacity, Button, Alert, TextInput } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { FC, useContext } from 'react';
+import { Text, View, } from 'react-native';
+
+import { AuthContext } from '../../context/AuthContext';
+
+import Button from '../Shared/Button';
 
 const MyProfileScreen: FC<{ route: any, navigation: any }> = ({ route, navigation }) => {
-
-    // useEffect(() => {
-    //     navigation.setOptions({ title: 'new Title' + id });
-    // })
+    const { logout } = useContext(AuthContext);
 
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <Text>My Profile</Text>
+            <Button title='Logout' onPress={logout} />
         </View>
     );
 }

@@ -1,7 +1,9 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useState, useContext } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { TextInput } from 'react-native-paper';
+
+import Spinner from 'react-native-loading-spinner-overlay'
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 
@@ -16,49 +18,67 @@ import authApi from '../../api/AuthApi';
 
 import { isEmailValid } from '../../utils/validators';
 import { iCurrentScreen } from '../Screens/UnAuthScreen';
+import { AuthContext } from '../../context/AuthContext';
 
 const EMAIL = "email";
 const PASSWORD = "password";
+const NAME = "name";
 
-type iErrMsg = { field: "email" | "password" | "", msg: string };
+type iField = "email" | "password" | "name";
+type iErrMsg = { field: iField | "", msg: string };
+type iFormData = { email: string, password: string, name: string };
 
 interface Props {
     setScreen: (newScreen: iCurrentScreen) => void;
 }
 
 const RegisterScreen = ({ setScreen }: Props) => {
-    const { register, handleSubmit, setValue } = useForm({ mode: "onChange" });
+    const { register, handleSubmit, setValue } = useForm<iFormData>({
+        mode: "onChange",
+        defaultValues: { email: "david@gmail.com", password: "123456", name: "david" }
+    });
+
+    const { isLoading, register: registerUser } = useContext(AuthContext);
 
     const [errMsg, setErrMsg] = useState<iErrMsg>({ field: "", msg: "" });
 
-    const onSubmit = useCallback(async (formData) => {
-        const { email, password } = formData;
+    const onSubmit = useCallback(async (formData: iFormData) => {
+        const { email, password, name } = formData;
 
         if (!email) {
             setErrMsg({ field: EMAIL, msg: "Required field" });
             return;
+        } else if (!isEmailValid(email)) {
+            setErrMsg({ field: EMAIL, msg: "Email is not valid" });
+            return;
         }
+
         if (!password) {
             setErrMsg({ field: PASSWORD, msg: "Required field" });
             return;
         }
 
-        if (!isEmailValid(email)) {
-            setErrMsg({ field: EMAIL, msg: "Email is not valid" });
+        if (!name) {
+            setErrMsg({ field: NAME, msg: "Required field" });
             return;
         }
 
-        const res = await authApi.signInUser(email, password);
-        const data: any = res.data;
-        if (data.err) {
-            setErrMsg({ field: "", msg: data.err });
+        const success = await registerUser(email, password, name);
+
+        if (success !== true) {
+            setErrMsg({ field: "", msg: success || "" });
+        } else {
+            setScreen("LOGIN");
         }
-        console.log(res.data)
+
     }, []);
 
     const onChangeField = useCallback(
-        name => text => {
+        (name: iField) => (text: string) => {
             setValue(name, text);
+            if (errMsg.msg) {
+                setErrMsg({ field: "", msg: "" });
+            }
         },
         []
     );
@@ -73,6 +93,7 @@ const RegisterScreen = ({ setScreen }: Props) => {
 
     return (
         <AuthBackground>
+            <Spinner visible={isLoading} />
             <View style={styles.container} >
                 <AppLogo />
                 <TextInput

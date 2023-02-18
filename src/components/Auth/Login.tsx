@@ -1,9 +1,11 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback, useState, useContext } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { TextInput } from 'react-native-paper';
-
+import Spinner from 'react-native-loading-spinner-overlay'
 import Ionicons from '@expo/vector-icons/Ionicons';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import AppLogo from '../Shared/Logo';
 import AuthBackground from '../Shared/AuthBackground';
@@ -16,22 +18,28 @@ import authApi from '../../api/AuthApi';
 
 import { isEmailValid } from '../../utils/validators';
 import { iCurrentScreen } from '../Screens/UnAuthScreen';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../utils/constatns';
+import { AuthContext } from '../../context/AuthContext';
 
 const EMAIL = "email";
 const PASSWORD = "password";
 
-type iErrMsg = { field: "email" | "password" | "", msg: string };
+type iField = "email" | "password"
+type iErrMsg = { field: iField | "", msg: string };
+type iFormData = { email: string, password: string };
 
 interface Props {
     setScreen: (newScreen: iCurrentScreen) => void;
 }
 
 const LoginScreen = ({ setScreen }: Props) => {
-    const { register, handleSubmit, setValue } = useForm({ mode: "onChange" });
+    const { register, handleSubmit, setValue } = useForm<iFormData>({ mode: "onChange" });
+
+    const { isLoading, login } = useContext(AuthContext);
 
     const [errMsg, setErrMsg] = useState<iErrMsg>({ field: "", msg: "" });
 
-    const onSubmit = useCallback(async (formData) => {
+    const onSubmit = useCallback(async (formData: iFormData) => {
         const { email, password } = formData;
 
         if (!email) {
@@ -47,16 +55,13 @@ const LoginScreen = ({ setScreen }: Props) => {
             return;
         }
 
-        const res = await authApi.signInUser(email, password);
-        const data: any = res.data;
-        if (data.err) {
-            setErrMsg({ field: "", msg: data.err });
-        }
-        console.log(res.data)
+        const res = await login(email, password);
+
+        setErrMsg({ field: "", msg: res as string });
     }, []);
 
     const onChangeField = useCallback(
-        name => text => {
+        (name: iField) => (text: string) => {
             setValue(name, text);
             if (errMsg.field) {
                 setErrMsg({ field: "", msg: "" })
@@ -74,6 +79,7 @@ const LoginScreen = ({ setScreen }: Props) => {
 
     return (
         <AuthBackground>
+            <Spinner visible={isLoading} />
             <View style={styles.container} >
                 <AppLogo />
                 <Title text='Hello, Welcome Back!' />
@@ -85,7 +91,6 @@ const LoginScreen = ({ setScreen }: Props) => {
                     label="Email"
                     onChangeText={onChangeField('email')}
                     style={[styles.input, { borderColor: errMsg.field === EMAIL ? "red" : theme.colors.primary }]}
-
                 />
 
                 <TextInput
@@ -96,6 +101,7 @@ const LoginScreen = ({ setScreen }: Props) => {
                     placeholder="Password"
                     onChangeText={onChangeField('password')}
                 />
+
                 <TouchableOpacity
                     style={{ marginBottom: 4 }}
                     onPress={() => setScreen("REGISTER")}
@@ -107,6 +113,7 @@ const LoginScreen = ({ setScreen }: Props) => {
                         </Text>
                     </Text>
                 </TouchableOpacity>
+
                 <View style={{ marginTop: 2 }} >
                     <Button title="Login" onPress={handleSubmit(onSubmit)} />
                 </View>

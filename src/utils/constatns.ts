@@ -4,3 +4,6 @@ export const URL_PATHS = {
     post: "post",
     file: "file"
 }
+
+export const ACCESS_TOKEN = "accessToken";
+export const REFRESH_TOKEN = "refreshToken";
