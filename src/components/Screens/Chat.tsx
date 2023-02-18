@@ -4,7 +4,7 @@ const ChatScreen = () => {
 
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text>All Posts</Text>
+            <Text>Chat iT</Text>
         </View>
     );
 }

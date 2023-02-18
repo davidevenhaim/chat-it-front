@@ -5,6 +5,7 @@ import AllPostsScreen from '../Screens/AllPosts';
 import AddPostScreen from '../Screens/AddPost';
 import MyProfileScreen from '../Screens/MyProfile';
 import { theme } from '../Core/theme';
+import ChatScreen from '../Screens/Chat';
 
 const Tab = createBottomTabNavigator();
 
@@ -23,6 +24,12 @@ const AuthNavigationContainer = () => (
                     case "My Profile":
                         iconName = "person-outline";
                         break;
+                    case "Chat":
+                        iconName = "chatbubbles-outline"
+                        break;
+                    default:
+                        iconName = "help-outline"
+                        break;
                 }
 
                 return <Ionicons
@@ -38,6 +45,14 @@ const AuthNavigationContainer = () => (
             <Tab.Screen
                 name="All Posts"
                 component={AllPostsScreen}
+                options={{
+                    title: '',
+                    headerShown: false
+                }}
+            />
+            <Tab.Screen
+                name="Chat"
+                component={ChatScreen}
                 options={{
                     title: '',
                     headerShown: false
