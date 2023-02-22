@@ -60,4 +60,5 @@ const uploadImage = async (imageURI: String) => {
     }
     return ""
 }
+
 export default { getAllStudents, addStudent, uploadImage }

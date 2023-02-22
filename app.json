@@ -6,6 +6,7 @@
     "orientation": "portrait",
     "icon": "./components/assets/icon.png",
     "userInterfaceStyle": "light",
+    "scheme": "com.test.chatit",
     "splash": {
       "image": "./components/assets/splash.png",
       "resizeMode": "contain",
@@ -18,13 +19,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.test.chatit"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./components/assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "bundleIdentifier": "com.test.chatit"
     },
     "web": {
       "favicon": "./assets/favicon.png"

@@ -9,7 +9,7 @@ const editUserInfo = async (userJson: any) => {
     return apiClient.post(`/${URL_PATHS.user}`, userJson);
 };
 
-const uploadUserImage = async (image: any) => {
+const uploadUserImage = async (image: FormData) => {
     return apiClient.post(`/${URL_PATHS.file}/file`, image);
 };
 

@@ -5,8 +5,6 @@ import { TextInput } from 'react-native-paper';
 import Spinner from 'react-native-loading-spinner-overlay'
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import AppLogo from '../Shared/Logo';
 import AuthBackground from '../Shared/AuthBackground';
 import Button from '../Shared/Button';
@@ -14,12 +12,11 @@ import Title from '../Shared/Header';
 
 import { theme } from '../Core/theme';
 
-import authApi from '../../api/AuthApi';
-
 import { isEmailValid } from '../../utils/validators';
 import { iCurrentScreen } from '../Screens/UnAuthScreen';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../utils/constatns';
 import { AuthContext } from '../../context/AuthContext';
+import GoogleSignInButton from './GoogleSignIn';
 
 const EMAIL = "email";
 const PASSWORD = "password";
@@ -123,19 +120,7 @@ const LoginScreen = ({ setScreen }: Props) => {
                         {errMsg.msg}
                     </Text>
                 }
-
-                <TouchableOpacity
-                    style={{
-                        marginTop: 35,
-                        borderWidth: 0.5,
-                        borderRadius: 40,
-                        padding: 7,
-                        borderColor: theme.colors.primary
-                    }}
-                    onPress={loginWithGoogle}
-                >
-                    <Ionicons name="logo-google" size={35} color="#f4c20d" />
-                </TouchableOpacity>
+                <GoogleSignInButton />
             </View>
 
         </AuthBackground>
