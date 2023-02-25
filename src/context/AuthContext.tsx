@@ -12,10 +12,7 @@ import { User } from '../utils/types/@User';
 type UserInfo = {
     accessToken: string;
     refreshToken: string;
-    email: string;
-    avatar: string;
-    name: string;
-    userPosts?: Post[];
+    id: string;
 };
 
 type AuthContextType = {
@@ -25,22 +22,24 @@ type AuthContextType = {
     register: (email: string, password: string, name: string) => Promise<true | string> | null;
     login: (email: string, password: string) => Promise<true | string> | null;
     logout: () => void;
+    getUserInfo: (id: string) => void;
     googleSignin: (accessToken: string) => Promise<boolean> | null;
     userData?: User;
 };
 
 export const AuthContext = createContext<AuthContextType>({
     isLoading: false,
-    userInfo: { accessToken: '', refreshToken: '', email: '', name: '', avatar: '' },
+    userInfo: { accessToken: '', refreshToken: '', id: '' },
     splashLoading: false,
     register: (email: string, password: string, name: string) => null,
     login: (email: string, password: string) => null,
     googleSignin: () => null,
+    getUserInfo: () => null,
     logout: () => { },
 });
 
 export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
-    const [userInfo, setUserInfo] = useState<UserInfo>({ accessToken: '', refreshToken: '', email: '', name: '', avatar: '' });
+    const [userInfo, setUserInfo] = useState<UserInfo>({ accessToken: '', refreshToken: '', id: '' });
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -63,6 +62,7 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
     };
 
     const login = async (email: string, password: string) => {
+        console.log("Login")
         setIsLoading(true);
         const res = await authApi.signInUser({ email, password });
 
@@ -74,8 +74,7 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
             return data.err as string;
         }
 
-
-        await createUserSession(data, data._id);
+        await createUserSession(data);
 
         setIsLoading(false);
         return true;
@@ -94,7 +93,7 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
         const data: UserInfo | any = res.data;
         console.log(data);
         if (!data.err) {
-            await createUserSession(data, data._id);
+            await createUserSession(data);
         }
 
         return true;
@@ -110,7 +109,7 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
         ]);
 
         setIsLoading(false);
-        setUserInfo({ accessToken: '', refreshToken: '', email: '', name: '', avatar: '' });
+        setUserInfo({ accessToken: '', refreshToken: '', id: '' });
     };
 
     const isLoggedIn = async () => {
@@ -132,11 +131,17 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
         }
     };
 
-    const createUserSession = async (data: UserInfo, userId: string) => {
-        const [userInfo] = await Promise.all([userApi.getUser(userId), AsyncStorage.setItem(ACCESS_TOKEN, data.accessToken), AsyncStorage.setItem(REFRESH_TOKEN, data.refreshToken)])
-        console.log(userId)
-        console.log("userInfo: ", userInfo);
+    const getUserInfo = async (userId: string) => {
+        const res = await userApi.getUser(userId)
+        setUserData(res.data as User);
+    }
+
+    const createUserSession = async (data: UserInfo) => {
+        const [userRes] = await Promise.all([userApi.getUser(data.id), AsyncStorage.setItem(ACCESS_TOKEN, data.accessToken), AsyncStorage.setItem(REFRESH_TOKEN, data.refreshToken)])
+        const userData = userRes.data;
+        setUserData(userData as User);
         setUserInfo(data);
+
         apiClient.setHeader('Authorization', `Bearer ${data.accessToken}`)
     }
 
@@ -153,8 +158,9 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
                 register,
                 login,
                 logout,
+                getUserInfo,
                 googleSignin,
-                userData
+                userData,
             }}
         >
             {children}

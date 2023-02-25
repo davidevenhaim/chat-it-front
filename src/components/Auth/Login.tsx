@@ -77,7 +77,9 @@ const LoginScreen = ({ setScreen }: Props) => {
             <Spinner visible={isLoading} />
             <View style={styles.container} >
                 <AppLogo />
-                <Title text='Hello, Welcome Back!' />
+                <Title>
+                    Hello, Welcome Back!
+                </Title>
                 <TextInput
                     autoComplete="email"
                     keyboardType="email-address"
@@ -110,7 +112,7 @@ const LoginScreen = ({ setScreen }: Props) => {
                 </TouchableOpacity>
 
                 <View style={{ marginTop: 2 }} >
-                    <Button title="Login" onPress={handleSubmit(onSubmit)} disbaled={isLoading} />
+                    <Button title="Login" onPress={handleSubmit(onSubmit)} disabled={isLoading} />
                 </View>
 
                 {errMsg.msg &&

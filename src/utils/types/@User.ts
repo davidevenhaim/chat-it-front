@@ -1,7 +1,7 @@
 import { Post } from "./@Post";
 
 export interface User {
-    avatar: string;
+    avatarUrl: string;
     email: string;
     name: string;
     posts: Post[];

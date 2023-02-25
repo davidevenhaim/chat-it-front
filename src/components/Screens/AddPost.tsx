@@ -12,7 +12,6 @@ import AppImagePicker from '../Shared/ImagePicker';
 import Title from '../Shared/Title';
 
 
-
 const AddPostScreen = () => {
     const [post, setPost] = useState<Post>({ text: '', image: '' })
 
@@ -25,8 +24,6 @@ const AddPostScreen = () => {
     }
 
     const handleSubmitPost = async () => {
-        console.log("!!!! ", post)
-
         if (!post.text) {
             setErrorMsg("Post description is required!");
             return;
@@ -40,19 +37,18 @@ const AddPostScreen = () => {
 
         const res = await postApi.addNewPost({ text: post.text });
         const newPostData: Post | any = res.data;
-        console.log(newPostData);
         if (newPostData._id) {
             const imageUrl = await generalApi.uploadImage(post.image, newPostData._id);
+
             if (imageUrl) {
-                console.log("Image url exists");
                 const res = await postApi.editPost(newPostData._id, { image: imageUrl })
-                console.log("Update post finished");
-                const data: Post | any = res.data
-                console.log("Data is: ", data)
+                const data: Post | any = res.data;
+
                 if (data._id) {
                     handleResetForm();
                     Alert.alert('New post created successfully!');
                 }
+
             }
         }
 
@@ -81,7 +77,9 @@ const AddPostScreen = () => {
 
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
 
-                <Title text='Add New Post' />
+                <Title>
+                    Add New Post
+                </Title>
 
                 <AppImagePicker
                     image={post.image || ''}
@@ -109,7 +107,7 @@ const AddPostScreen = () => {
                     <Button
                         title='Submit Post'
                         onPress={handleSubmitPost}
-                        disbaled={isLoading}
+                        disabled={isLoading}
                         color={isLoading ? theme.colors.darkGrey : undefined}
                     />
                 </View>

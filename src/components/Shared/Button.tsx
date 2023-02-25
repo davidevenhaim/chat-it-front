@@ -1,25 +1,21 @@
 import React from 'react';
-import { Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity, ButtonProps, TouchableOpacityProps } from 'react-native';
 import { theme } from '../Core/theme';
 
 interface Props {
-    onPress: () => void;
     title: string;
     color?: string;
-    disbaled?: boolean;
-
 }
 
-const Button = ({ color, disbaled, onPress, title }: Props) => {
+const Button = ({ color, title, ...props }: Props & TouchableOpacityProps) => {
 
     return (
         <TouchableOpacity
-            style={[styles.button, { backgroundColor: color || theme.colors.primary }]}
-            onPress={onPress}
-            disabled={disbaled}
+            {...props}
+            style={[styles.button, { backgroundColor: color || theme.colors.primary }, props.style]}
         >
             <Text style={styles.text}>{title}</Text>
-        </TouchableOpacity>
+        </TouchableOpacity >
     );
 }
 

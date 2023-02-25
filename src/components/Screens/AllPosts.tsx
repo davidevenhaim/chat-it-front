@@ -33,7 +33,6 @@ const AllPostsScreen = ({ navigation }: Props) => {
 
         if (Array.isArray(res.data)) {
             setAllPosts(res.data as Post[]);
-            console.log(res.data[0]?.owner)
             return res.data as Post[];
         }
 
