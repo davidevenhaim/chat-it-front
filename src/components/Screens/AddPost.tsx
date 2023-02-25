@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Alert, KeyboardAvoidingView, StyleSheet, Text, View } from 'react-native';
 
 import { TextInput } from 'react-native-paper';
+import generalApi from '../../api/GeneralApi';
 import postApi from '../../api/PostApi';
 import { Post } from '../../utils/types/@Post';
 import { theme } from '../Core/theme';
@@ -13,11 +14,11 @@ import Title from '../Shared/Title';
 
 
 const AddPostScreen = () => {
-    const [post, setPost] = useState<Post>({ text: '', image: 'https://samplelib.com/lib/preview/png/sample-boat-400x300.png' })
+    const [post, setPost] = useState<Post>({ text: '', image: '' })
 
-    const [errorMsg, setErrorMsg] = useState<string>('a');
+    const [errorMsg, setErrorMsg] = useState<string>('');
 
-    const [loading, setLoading] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleResetForm = () => {
         setPost({ text: '', image: '' });
@@ -35,17 +36,34 @@ const AddPostScreen = () => {
             setErrorMsg("Post image is required!");
             return;
         }
-        setLoading(true);
-        const res = await postApi.addNewPost({ text: post.text, image: post.image });
-        setLoading(false);
-        const data: Post | any = res.data;
-        if (data._id) {
-            handleResetForm();
-            Alert.alert('New post created successfully!');
+        setIsLoading(true);
+
+        const res = await postApi.addNewPost({ text: post.text });
+        const newPostData: Post | any = res.data;
+        console.log(newPostData);
+        if (newPostData._id) {
+            const imageUrl = await generalApi.uploadImage(post.image, newPostData._id);
+            if (imageUrl) {
+                console.log("Image url exists");
+                const res = await postApi.editPost(newPostData._id, { image: imageUrl })
+                console.log("Update post finished");
+                const data: Post | any = res.data
+                console.log("Data is: ", data)
+                if (data._id) {
+                    handleResetForm();
+                    Alert.alert('New post created successfully!');
+                }
+            }
         }
+
+        setIsLoading(false);
     }
 
     const handleChange = (field: 'text' | 'image', value: string) => {
+        if (errorMsg) {
+            setErrorMsg('');
+        }
+
         switch (field) {
             case 'image':
                 setPost(prevState => ({ ...prevState, image: value }));
@@ -66,11 +84,16 @@ const AddPostScreen = () => {
                 <Title text='Add New Post' />
 
                 <AppImagePicker
-                    image={post.image}
+                    image={post.image || ''}
                     setImage={(image: string) => handleChange('image', image)}
                     previewSize={200}
+                    disabled={isLoading}
                 />
-
+                {errorMsg &&
+                    <Text style={{ color: "red", fontSize: 16 }} >
+                        {errorMsg}
+                    </Text>
+                }
                 <TextInput
                     multiline
                     numberOfLines={5}
@@ -79,13 +102,15 @@ const AddPostScreen = () => {
                     label="Description"
                     value={post.text}
                     onChangeText={(value: string) => handleChange('text', value)}
+                    disabled={isLoading}
                 />
 
                 <View style={{ marginTop: 6 }} >
                     <Button
                         title='Submit Post'
                         onPress={handleSubmitPost}
-                        disbaled={loading}
+                        disbaled={isLoading}
+                        color={isLoading ? theme.colors.darkGrey : undefined}
                     />
                 </View>
             </View>

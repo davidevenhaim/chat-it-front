@@ -1,8 +1,9 @@
 import { StyleSheet, View } from "react-native";
-import { Avatar } from "react-native-paper";
-import { Post } from "../../utils/types/@Post";
+
 import PostInfo from "./PostInfo";
 import PostOwnerInfo from "./PostOwnerInfo";
+
+import { Post } from "../../utils/types/@Post";
 
 interface Props {
     post: Post
@@ -10,18 +11,16 @@ interface Props {
 
 const PostItem = ({ post }: Props) => {
     const { text } = post;
-    const avatar = '';
-    const name = 'David';
 
     return (
         <View style={styles.container} >
             <PostOwnerInfo
-                avatar={avatar}
-                name={name}
+                avatar={post.owner?.avatarUrl || ""}
+                name={post.owner?.name || ""}
             />
 
             <View style={{ alignItems: 'center' }} >
-                <PostInfo text={text} image={post.image} />
+                <PostInfo text={text} image={post.image || ""} />
             </View>
         </View>
     );

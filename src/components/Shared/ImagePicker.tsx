@@ -1,21 +1,20 @@
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { Avatar } from 'react-native-paper';
+
 import * as ImagePicker from 'expo-image-picker';
 
-import { StyleSheet, Text, View, Image, TouchableOpacity, Alert, TextInput, ScrollView } from 'react-native';
-
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useEffect } from 'react';
+
 import { theme } from '../Core/theme';
-import { Avatar } from 'react-native-paper';
 
 interface Props {
     setImage: (image: string) => void;
     image: string;
     previewSize?: number;
+    disabled?: boolean
 }
 
-
-
-const AppImagePicker = ({ image, setImage, previewSize = 110 }: Props) => {
+const AppImagePicker = ({ image, setImage, previewSize = 110, disabled }: Props) => {
     const [status, requestPermission] = ImagePicker.useCameraPermissions();
 
     const askPermission = async () => {
@@ -59,36 +58,28 @@ const AppImagePicker = ({ image, setImage, previewSize = 110 }: Props) => {
         }
     }
 
-    const onSaveCallback = async () => {
-        console.log("save button was pressed")
-
-        try {
-            if (image != "") {
-                console.log("uploading image")
-                // const url = await StudentModel.uploadImage(image)
-                // student.image = url
-                // console.log("got url from upload: " + url)
-            }
-            console.log("saving stundet")
-            // await StudentModel.addStudent(student)
-        } catch (err) {
-            console.log("fail adding studnet: " + err)
-        }
-    }
-
-
     return (
         <>
             <Avatar.Image source={image ? { uri: image } : require('../../assets/ava.png')} size={previewSize} />
 
             <View style={styles.iconContainer} >
 
-                <TouchableOpacity onPress={openCamera} >
-                    <Ionicons name='camera' style={styles.icon} size={50} />
+                <TouchableOpacity onPress={openCamera} disabled={disabled} >
+                    <Ionicons
+                        name='camera'
+                        style={styles.icon}
+                        size={50}
+                        color={disabled ? theme.colors.darkGrey : theme.colors.primary}
+                    />
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={openGallery} >
-                    <Ionicons name='image' style={styles.icon} size={50} />
+                <TouchableOpacity onPress={openGallery} disabled={disabled} >
+                    <Ionicons
+                        name='image'
+                        style={styles.icon}
+                        size={50}
+                        color={disabled ? theme.colors.darkGrey : theme.colors.primary}
+                    />
                 </TouchableOpacity>
 
             </View>
@@ -112,7 +103,6 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     icon: {
-        color: theme.colors.primary,
         margin: 4,
     }
 });

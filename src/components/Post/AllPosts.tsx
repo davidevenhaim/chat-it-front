@@ -21,16 +21,19 @@ const AllPosts = ({ navToCreatePost, posts }: Props) => {
 
         <View style={{ flex: 1, justifyContent: 'center' }}>
 
-            <Title text={noPosts ? "No posts yet..." : "All Posts"} />
 
             {
                 noPosts ?
-                    <>
+                    <View style={{ alignItems: 'center' }}>
+                        <Title text="No posts yet..." />
                         <LottieAnimation />
                         <Button onPress={navToCreatePost} title='Add Post Now' />
-                    </>
+                    </View>
                     :
-                    posts.map(post => <PostItem key={post._id} post={post} />)
+                    <>
+                        <Title text="All Posts" />
+                        {posts.map(post => <PostItem key={post._id} post={post} />)}
+                    </>
             }
 
         </View>

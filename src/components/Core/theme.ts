@@ -11,6 +11,7 @@ export const theme = {
         iconFocused: "#85CDFD",
         snowWhite: "#F7F7F7",
         caption: "#E8E2E2",
-        lightGrey: "#EFF5F5"
+        lightGrey: "#EFF5F5",
+        darkGrey: "#B2B2B2"
     },
 }

@@ -3,8 +3,10 @@ import axios from 'axios';
 import React, { createContext, useEffect, useState } from 'react';
 import authApi from '../api/AuthApi';
 import apiClient from '../api/ClientApi';
+import userApi from '../api/UserApi';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../utils/constatns';
 import { Post } from '../utils/types/@Post';
+import { User } from '../utils/types/@User';
 
 
 type UserInfo = {
@@ -24,6 +26,7 @@ type AuthContextType = {
     login: (email: string, password: string) => Promise<true | string> | null;
     logout: () => void;
     googleSignin: (accessToken: string) => Promise<boolean> | null;
+    userData?: User;
 };
 
 export const AuthContext = createContext<AuthContextType>({
@@ -32,14 +35,18 @@ export const AuthContext = createContext<AuthContextType>({
     splashLoading: false,
     register: (email: string, password: string, name: string) => null,
     login: (email: string, password: string) => null,
-    googleSignin: (accessToken) => null,
+    googleSignin: () => null,
     logout: () => { },
 });
 
 export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
     const [userInfo, setUserInfo] = useState<UserInfo>({ accessToken: '', refreshToken: '', email: '', name: '', avatar: '' });
+
     const [isLoading, setIsLoading] = useState<boolean>(false);
+
     const [splashLoading, setSplashLoading] = useState<boolean>(false);
+
+    const [userData, setUserData] = useState<User>();
 
     const register = async (email: string, password: string, name: string): Promise<true | string> => {
         setIsLoading(true);
@@ -63,11 +70,12 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
 
         if (data.err) {
             setIsLoading(false);
+
             return data.err as string;
         }
 
 
-        await createUserSession(data);
+        await createUserSession(data, data._id);
 
         setIsLoading(false);
         return true;
@@ -86,7 +94,7 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
         const data: UserInfo | any = res.data;
         console.log(data);
         if (!data.err) {
-            await createUserSession(data);
+            await createUserSession(data, data._id);
         }
 
         return true;
@@ -124,9 +132,10 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
         }
     };
 
-    const createUserSession = async (data: UserInfo) => {
-        await Promise.all([AsyncStorage.setItem(ACCESS_TOKEN, data.accessToken), AsyncStorage.setItem(REFRESH_TOKEN, data.refreshToken)])
-
+    const createUserSession = async (data: UserInfo, userId: string) => {
+        const [userInfo] = await Promise.all([userApi.getUser(userId), AsyncStorage.setItem(ACCESS_TOKEN, data.accessToken), AsyncStorage.setItem(REFRESH_TOKEN, data.refreshToken)])
+        console.log(userId)
+        console.log("userInfo: ", userInfo);
         setUserInfo(data);
         apiClient.setHeader('Authorization', `Bearer ${data.accessToken}`)
     }
@@ -144,7 +153,8 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
                 register,
                 login,
                 logout,
-                googleSignin: googleSignin,
+                googleSignin,
+                userData
             }}
         >
             {children}
