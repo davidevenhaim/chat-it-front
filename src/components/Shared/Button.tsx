@@ -6,14 +6,17 @@ interface Props {
     onPress: () => void;
     title: string;
     color?: string;
+    disbaled?: boolean;
+
 }
 
-const Button = ({ color, onPress, title }: Props) => {
+const Button = ({ color, disbaled, onPress, title }: Props) => {
 
     return (
         <TouchableOpacity
             style={[styles.button, { backgroundColor: color || theme.colors.primary }]}
             onPress={onPress}
+            disabled={disbaled}
         >
             <Text style={styles.text}>{title}</Text>
         </TouchableOpacity>

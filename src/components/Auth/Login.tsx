@@ -8,7 +8,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import AppLogo from '../Shared/Logo';
 import AuthBackground from '../Shared/AuthBackground';
 import Button from '../Shared/Button';
-import Title from '../Shared/Header';
+import Title from '../Shared/Title';
 
 import { theme } from '../Core/theme';
 
@@ -67,8 +67,6 @@ const LoginScreen = ({ setScreen }: Props) => {
         []
     );
 
-    const loginWithGoogle = () => { }
-
     useEffect(() => {
         register('email');
         register('password');
@@ -112,7 +110,7 @@ const LoginScreen = ({ setScreen }: Props) => {
                 </TouchableOpacity>
 
                 <View style={{ marginTop: 2 }} >
-                    <Button title="Login" onPress={handleSubmit(onSubmit)} />
+                    <Button title="Login" onPress={handleSubmit(onSubmit)} disbaled={isLoading} />
                 </View>
 
                 {errMsg.msg &&
@@ -120,7 +118,7 @@ const LoginScreen = ({ setScreen }: Props) => {
                         {errMsg.msg}
                     </Text>
                 }
-                <GoogleSignInButton />
+                <GoogleSignInButton disabled={isLoading} />
             </View>
 
         </AuthBackground>

@@ -1,19 +1,26 @@
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { TouchableOpacity } from 'react-native';
 
 // @ expo
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
 import Ionicons from '@expo/vector-icons/Ionicons';
+
 // @ Constants
 import { theme } from '../Core/theme';
 
-// @ Api
-import authApi from '../../api/AuthApi';
+// @ Context
+import { AuthContext } from '../../context/AuthContext';
 
 WebBrowser.maybeCompleteAuthSession();
 
-const GoogleSignInButton = () => {
+interface Props {
+    disabled?: boolean;
+}
+
+const GoogleSignInButton = ({ disabled }: Props) => {
+    const { googleSignin } = useContext(AuthContext);
+
     const [_, response, promptAsync] = Google.useAuthRequest({
         expoClientId: process.env.EXPO_CLIENT_ID,
         iosClientId: process.env.OAUTH_IOS_CLIENT_ID,
@@ -21,15 +28,16 @@ const GoogleSignInButton = () => {
     });
 
     const logGoogleUser = async (accessToken: string): Promise<boolean> => {
-        const userInfo = await authApi.fetchUserInfo(accessToken);
-        const res = await authApi.googleSignUser({ email: userInfo.email, name: userInfo.name });
+        return await googleSignin(accessToken) || false;
+
+        // const userInfo = await authApi.fetchUserInfo(accessToken);
+        // console.log(userInfo);
+        // const res = await authApi.googleSignUser({ email: userInfo.email, name: userInfo.given_name, avatar: userInfo.picture });
 
         // if(res.data.status === 200) {
         // write user to the AuthContext
         // }
         return true;
-
-        return false;
     }
 
     useEffect(() => {
@@ -51,6 +59,7 @@ const GoogleSignInButton = () => {
                 padding: 7,
                 borderColor: theme.colors.primary
             }}
+            disabled={disabled}
             onPress={() => {
                 promptAsync();
             }}

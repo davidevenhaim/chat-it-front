@@ -6,6 +6,7 @@ import AddPostScreen from '../Screens/AddPost';
 import MyProfileScreen from '../Screens/MyProfile';
 import { theme } from '../Core/theme';
 import ChatScreen from '../Screens/Chat';
+import { AUTH_NAVIGATION_NAMES } from './constants';
 
 const Tab = createBottomTabNavigator();
 
@@ -15,16 +16,16 @@ const AuthNavigationContainer = () => (
             tabBarIcon: ({ focused, color, size }) => {
                 let iconName = "";
                 switch (route.name) {
-                    case "All Posts":
+                    case AUTH_NAVIGATION_NAMES.ALL_POSTS:
                         iconName = "newspaper-outline";
                         break;
-                    case "Add Post":
+                    case AUTH_NAVIGATION_NAMES.ADD_POST:
                         iconName = "add-outline";
                         break;
-                    case "My Profile":
+                    case AUTH_NAVIGATION_NAMES.MY_PROFILE:
                         iconName = "person-outline";
                         break;
-                    case "Chat":
+                    case AUTH_NAVIGATION_NAMES.CHAT:
                         iconName = "chatbubbles-outline"
                         break;
                     default:
@@ -43,7 +44,7 @@ const AuthNavigationContainer = () => (
             tabBarInactiveTintColor: 'gray',
         })}>
             <Tab.Screen
-                name="All Posts"
+                name={AUTH_NAVIGATION_NAMES.ALL_POSTS}
                 component={AllPostsScreen}
                 options={{
                     title: '',
@@ -51,7 +52,7 @@ const AuthNavigationContainer = () => (
                 }}
             />
             <Tab.Screen
-                name="Chat"
+                name={AUTH_NAVIGATION_NAMES.CHAT}
                 component={ChatScreen}
                 options={{
                     title: '',
@@ -59,7 +60,7 @@ const AuthNavigationContainer = () => (
                 }}
             />
             <Tab.Screen
-                name="Add Post"
+                name={AUTH_NAVIGATION_NAMES.ADD_POST}
                 component={AddPostScreen}
                 options={{
                     title: '',
@@ -67,7 +68,7 @@ const AuthNavigationContainer = () => (
                 }}
             />
             <Tab.Screen
-                name="My Profile"
+                name={AUTH_NAVIGATION_NAMES.MY_PROFILE}
                 component={MyProfileScreen}
                 options={{
                     title: '',

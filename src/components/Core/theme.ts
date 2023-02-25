@@ -9,6 +9,8 @@ export const theme = {
         secondary: '#414757',
         error: '#f13a59',
         iconFocused: "#85CDFD",
-        snowWhite: "#F7F7F7"
+        snowWhite: "#F7F7F7",
+        caption: "#E8E2E2",
+        lightGrey: "#EFF5F5"
     },
 }

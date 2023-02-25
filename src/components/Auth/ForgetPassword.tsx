@@ -8,7 +8,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import AppLogo from '../Shared/Logo';
 import AuthBackground from '../Shared/AuthBackground';
 import Button from '../Shared/Button';
-import Title from '../Shared/Header';
+import Title from '../Shared/Title';
 
 import { theme } from '../Core/theme';
 

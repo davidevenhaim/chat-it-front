@@ -5,20 +5,16 @@ import { TextInput } from 'react-native-paper';
 
 import Spinner from 'react-native-loading-spinner-overlay'
 
-import Ionicons from '@expo/vector-icons/Ionicons';
-
 import AppLogo from '../Shared/Logo';
 import AuthBackground from '../Shared/AuthBackground';
 import Button from '../Shared/Button';
-import Title from '../Shared/Header';
 
 import { theme } from '../Core/theme';
-
-import authApi from '../../api/AuthApi';
 
 import { isEmailValid } from '../../utils/validators';
 import { iCurrentScreen } from '../Screens/UnAuthScreen';
 import { AuthContext } from '../../context/AuthContext';
+import GoogleSignInButton from './GoogleSignIn';
 
 const EMAIL = "email";
 const PASSWORD = "password";
@@ -137,7 +133,7 @@ const RegisterScreen = ({ setScreen }: Props) => {
                 </TouchableOpacity>
 
                 <View style={{ marginTop: 2 }} >
-                    <Button title="Signup" onPress={handleSubmit(onSubmit)} />
+                    <Button title="Signup" onPress={handleSubmit(onSubmit)} disbaled={isLoading} />
                 </View>
 
                 {errMsg.msg &&
@@ -146,18 +142,7 @@ const RegisterScreen = ({ setScreen }: Props) => {
                     </Text>
                 }
 
-                <TouchableOpacity
-                    style={{
-                        marginTop: 35,
-                        borderWidth: 0.5,
-                        borderRadius: 40,
-                        padding: 7,
-                        borderColor: theme.colors.primary
-                    }}
-                    onPress={loginWithGoogle}
-                >
-                    <Ionicons name="logo-google" size={35} color="#f4c20d" />
-                </TouchableOpacity>
+                <GoogleSignInButton disabled={isLoading} />
             </View>
 
         </AuthBackground>
