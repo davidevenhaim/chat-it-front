@@ -1,15 +1,21 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 import PostInfo from "./PostInfo";
 import PostOwnerInfo from "./PostOwnerInfo";
-
+// @ types
 import { Post } from "../../utils/types/@Post";
+import { theme } from "../Core/theme";
 
 interface Props {
-    post: Post
+    post: Post;
+    isOwner?: boolean;
+    handleEdit?: () => void;
 }
 
-const PostItem = ({ post }: Props) => {
+const voidFunc = () => null;
+
+const PostItem = ({ isOwner, post, handleEdit }: Props) => {
     const { text } = post;
 
     return (
@@ -18,9 +24,15 @@ const PostItem = ({ post }: Props) => {
                 avatar={post.owner?.avatarUrl || ""}
                 name={post.owner?.name || ""}
             />
-
             <View style={{ alignItems: 'center' }} >
-                <PostInfo text={text} image={post.image || ""} />
+                <PostInfo
+                    text={text}
+                    image={post.image || ""}
+                    owner={{
+                        isOwner: isOwner || false,
+                        handleEdit: isOwner ? handleEdit || voidFunc : voidFunc
+                    }}
+                />
             </View>
         </View>
     );

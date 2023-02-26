@@ -6,7 +6,7 @@ import apiClient from '../api/ClientApi';
 import userApi from '../api/UserApi';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../utils/constatns';
 import { Post } from '../utils/types/@Post';
-import { User } from '../utils/types/@User';
+import { iEditUser, User } from '../utils/types/@User';
 
 
 type UserInfo = {
@@ -22,6 +22,8 @@ type AuthContextType = {
     register: (email: string, password: string, name: string) => Promise<true | string> | null;
     login: (email: string, password: string) => Promise<true | string> | null;
     logout: () => void;
+    toggleLoading: () => void;
+    editUserInfo: (userId: string, data: iEditUser) => void;
     getUserInfo: (id: string) => void;
     googleSignin: (accessToken: string) => Promise<boolean> | null;
     userData?: User;
@@ -34,8 +36,10 @@ export const AuthContext = createContext<AuthContextType>({
     register: (email: string, password: string, name: string) => null,
     login: (email: string, password: string) => null,
     googleSignin: () => null,
+    editUserInfo: () => null,
     getUserInfo: () => null,
     logout: () => { },
+    toggleLoading: () => { }
 });
 
 export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
@@ -62,7 +66,6 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
     };
 
     const login = async (email: string, password: string) => {
-        console.log("Login")
         setIsLoading(true);
         const res = await authApi.signInUser({ email, password });
 
@@ -91,7 +94,7 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
             });
 
         const data: UserInfo | any = res.data;
-        console.log(data);
+
         if (!data.err) {
             await createUserSession(data);
         }
@@ -127,9 +130,15 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
             setSplashLoading(false);
         } catch (e) {
             setSplashLoading(false);
-            console.log(`is logged in error ${e}`);
         }
     };
+
+    const toggleLoading = (val?: boolean) => setIsLoading(prevState => val || !prevState);
+
+    const editUserInfo = async (userId: string, data: iEditUser) => {
+        await userApi.editUserInfo(userId, data);
+        getUserInfo(userId);
+    }
 
     const getUserInfo = async (userId: string) => {
         const res = await userApi.getUser(userId)
@@ -161,6 +170,8 @@ export const AuthProvider: React.FC<{ children: any }> = ({ children }) => {
                 getUserInfo,
                 googleSignin,
                 userData,
+                editUserInfo,
+                toggleLoading
             }}
         >
             {children}

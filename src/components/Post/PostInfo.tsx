@@ -1,18 +1,27 @@
-import { Image, StyleSheet, View } from "react-native";
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+
 import { Text } from "react-native-paper";
 import { theme } from "../Core/theme";
 
 interface Props {
     text: string;
     image: string;
+    owner?: { isOwner: boolean, handleEdit: () => void }
 }
 
-const PostInfo = ({ image, text }: Props) => (
+const PostInfo = ({ image, text, owner }: Props) => (
     <View style={styles.container} >
         <Text style={styles.text} >
             {text}
         </Text>
         <Image source={{ uri: image }} style={styles.image} />
+        {owner?.isOwner &&
+            <TouchableOpacity style={{ alignItems: "center" }} onPress={owner.handleEdit} >
+                <Ionicons name="create-outline" color={theme.colors.primary} size={32} />
+                <Text>Edit Post</Text>
+            </TouchableOpacity>
+        }
     </View>
 );
 

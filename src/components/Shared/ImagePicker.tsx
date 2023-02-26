@@ -11,10 +11,11 @@ interface Props {
     setImage: (image: string) => void;
     image: string;
     previewSize?: number;
-    disabled?: boolean
+    disabled?: boolean;
+    hideBtns?: boolean;
 }
 
-const AppImagePicker = ({ image, setImage, previewSize = 110, disabled }: Props) => {
+const AppImagePicker = ({ image, setImage, previewSize = 110, disabled, hideBtns }: Props) => {
     const [status, requestPermission] = ImagePicker.useCameraPermissions();
 
     const askPermission = async () => {
@@ -24,7 +25,6 @@ const AppImagePicker = ({ image, setImage, previewSize = 110, disabled }: Props)
                 alert("If you want to take a picture, camera permsission is required.")
             }
         } catch (err) {
-            console.log("ask permission error " + err)
         }
     }
 
@@ -41,7 +41,6 @@ const AppImagePicker = ({ image, setImage, previewSize = 110, disabled }: Props)
             }
 
         } catch (err) {
-            console.log("open camera error:" + err)
         }
     }
 
@@ -54,7 +53,6 @@ const AppImagePicker = ({ image, setImage, previewSize = 110, disabled }: Props)
             }
 
         } catch (err) {
-            console.log("open camera error:" + err)
         }
     }
 
@@ -62,7 +60,7 @@ const AppImagePicker = ({ image, setImage, previewSize = 110, disabled }: Props)
         <>
             <Avatar.Image source={image ? { uri: image } : require('../../assets/ava.png')} size={previewSize} />
 
-            <View style={styles.iconContainer} >
+            {!hideBtns && <View style={styles.iconContainer} >
 
                 <TouchableOpacity onPress={openCamera} disabled={disabled} >
                     <Ionicons
@@ -82,7 +80,7 @@ const AppImagePicker = ({ image, setImage, previewSize = 110, disabled }: Props)
                     />
                 </TouchableOpacity>
 
-            </View>
+            </View>}
         </>
     )
 }

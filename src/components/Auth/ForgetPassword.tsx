@@ -31,7 +31,7 @@ const ForgetPasswordScreen = ({ setScreen }: Props) => {
 
     const [errMsg, setErrMsg] = useState<iErrMsg>({ field: "", msg: "" });
 
-    const onSubmit = useCallback(async (formData) => {
+    const onSubmit = useCallback(async (formData: { email: string, password: string }) => {
         const { email, password } = formData;
 
         if (!email) {
@@ -48,16 +48,15 @@ const ForgetPasswordScreen = ({ setScreen }: Props) => {
             return;
         }
 
-        const res = await authApi.signInUser(email, password);
+        const res = await authApi.signInUser({ email, password });
         const data: any = res.data;
         if (data.err) {
             setErrMsg({ field: "", msg: data.err });
         }
-        console.log(res.data)
     }, []);
 
     const onChangeField = useCallback(
-        name => text => {
+        (name: string) => (text: string) => {
             setValue(name, text);
         },
         []
@@ -74,7 +73,9 @@ const ForgetPasswordScreen = ({ setScreen }: Props) => {
         <AuthBackground>
             <View style={styles.container} >
                 <AppLogo />
-                <Title text='Hello, Welcome Back!' />
+                <Title>
+                    Hello, Welcome Back!
+                </Title>
                 <TextInput
                     autoComplete="email"
                     keyboardType="email-address"

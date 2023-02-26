@@ -6,3 +6,8 @@ export interface User {
     name: string;
     posts: Post[];
 }
+
+export interface iEditUser {
+    avatarUrl?: string;
+    name?: string;
+}

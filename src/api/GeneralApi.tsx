@@ -17,7 +17,7 @@ const uploadImage = async (imageURI: string, id: string): Promise<false | string
             }
         }
     } catch (err) {
-        console.log("save failed " + err)
+        ("save failed " + err)
         return false;
     }
 

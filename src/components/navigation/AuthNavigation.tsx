@@ -2,7 +2,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import AllPostsScreen from '../Screens/AllPosts';
-import AddPostScreen from '../Screens/AddPost';
+import AddEditPostScreen from '../Screens/AddEditPost';
 import MyProfileScreen from '../Screens/MyProfile';
 import { theme } from '../Core/theme';
 import ChatScreen from '../Screens/Chat';
@@ -61,7 +61,7 @@ const AuthNavigationContainer = () => (
             />
             <Tab.Screen
                 name={AUTH_NAVIGATION_NAMES.ADD_POST}
-                component={AddPostScreen}
+                component={AddEditPostScreen}
                 options={{
                     title: '',
                     headerShown: false

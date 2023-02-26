@@ -1,3 +1,4 @@
+import FormData from "form-data";
 import userApi from "../api/UserApi";
 
 export const uploadImage = async (imageURI: string) => {
@@ -6,16 +7,13 @@ export const uploadImage = async (imageURI: string) => {
     try {
         const res = await userApi.uploadUserImage(body)
         if (!res.ok) {
-            console.log("save failed " + res.problem)
         } else {
             if (res.data) {
                 const d: any = res.data
-                console.log("----= url:" + d.url)
                 return d.url
             }
         }
     } catch (err) {
-        console.log("save failed " + err)
     }
     return ""
 }
