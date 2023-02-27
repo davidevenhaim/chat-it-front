@@ -1,7 +1,7 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useState } from 'react';
 
-import { KeyboardAvoidingView, StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
+import { KeyboardAvoidingView, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { theme } from '../Core/theme';
 
 interface Props {
@@ -21,21 +21,23 @@ const SendMessage = ({ handleSendMessage }: Props) => {
     }
 
     return (
-        <KeyboardAvoidingView behavior="padding">
-            <View style={styles.container} >
+        <SafeAreaView>
+            <KeyboardAvoidingView behavior="padding">
+                <View style={styles.container} >
 
-                <TextInput
-                    value={msg}
-                    onChangeText={(val) => setMsg(val)}
-                    style={styles.textBox}
-                />
+                    <TextInput
+                        value={msg}
+                        onChangeText={(val) => setMsg(val)}
+                        style={styles.textBox}
+                    />
 
-                <TouchableOpacity onPress={handleSend} >
-                    <Ionicons name="send-outline" size={36} />
-                </TouchableOpacity>
+                    <TouchableOpacity onPress={handleSend} >
+                        <Ionicons name="send-outline" size={36} />
+                    </TouchableOpacity>
 
-            </View>
-        </KeyboardAvoidingView>
+                </View>
+            </KeyboardAvoidingView>
+        </SafeAreaView>
     )
 }
 

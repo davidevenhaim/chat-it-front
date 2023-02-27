@@ -4,7 +4,7 @@ import React, { createContext, useEffect, useState } from 'react';
 import authApi from '../api/AuthApi';
 import apiClient from '../api/ClientApi';
 import userApi from '../api/UserApi';
-import { ACCESS_TOKEN, REFRESH_TOKEN } from '../utils/constatns';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../utils/constants';
 import { Post } from '../utils/types/@Post';
 import { iEditUser, User } from '../utils/types/@User';
 

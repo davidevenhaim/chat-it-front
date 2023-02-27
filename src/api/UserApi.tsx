@@ -2,7 +2,7 @@ import FormData from "form-data";
 
 import apiClient from "./ClientApi";
 
-import { URL_PATHS } from "../utils/constatns";
+import { URL_PATHS } from "../utils/constants";
 import { iEditUser } from "../utils/types/@User";
 
 const getUser = async (userId: string) => {

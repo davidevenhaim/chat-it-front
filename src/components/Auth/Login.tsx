@@ -14,7 +14,7 @@ import { theme } from '../Core/theme';
 
 import { isEmailValid } from '../../utils/validators';
 import { iCurrentScreen } from '../Screens/UnAuthScreen';
-import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../utils/constatns';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../utils/constants';
 import { AuthContext } from '../../context/AuthContext';
 import GoogleSignInButton from './GoogleSignIn';
 

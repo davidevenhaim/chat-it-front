@@ -8,10 +8,10 @@ interface Props {
 
 const PostOwnerInfo = ({ avatar, name }: Props) => (
     <View style={styles.container} >
-        <Avatar.Image size={42} source={avatar ? { uri: avatar } : require('../../assets/ava.png')} />
         <Text style={styles.text} >
             {name}
         </Text>
+        <Avatar.Image size={42} source={avatar ? { uri: avatar } : require('../../assets/ava.png')} />
     </View>
 )
 
