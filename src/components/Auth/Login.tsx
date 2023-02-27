@@ -41,14 +41,17 @@ const LoginScreen = ({ setScreen }: Props) => {
 
         if (!email) {
             setErrMsg({ field: EMAIL, msg: "Required field" });
+
             return;
         } else if (!isEmailValid(email)) {
             setErrMsg({ field: EMAIL, msg: "Email is not valid" });
+
             return;
         }
 
         if (!password) {
             setErrMsg({ field: PASSWORD, msg: "Required field" });
+
             return;
         }
 

@@ -1,4 +1,4 @@
-import { FC, useContext, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import { RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, View, } from 'react-native';
 import { Badge, TextInput } from 'react-native-paper';
 
@@ -14,6 +14,7 @@ import AllPosts from '../Post/AllPosts';
 
 // @ constants
 import { AUTH_NAVIGATION_NAMES } from '../navigation/constants';
+import { Post } from '../../utils/types/@Post'
 import GeneralApi from '../../api/GeneralApi';
 
 
@@ -110,7 +111,7 @@ const MyProfileScreen: FC<{ route: any, navigation: any }> = ({ route, navigatio
                 refreshControl={<RefreshControl refreshing={isLoading} onRefresh={onRefresh} />}
             >
                 <AllPosts
-                    posts={userData?.posts || []}
+                    posts={userData?.posts?.map(item => ({ ...item, postOwner: { ...userData } })) as Post[] || []}
                     navToCreatePost={handleCreatePost}
                     title="My Posts"
                 />
