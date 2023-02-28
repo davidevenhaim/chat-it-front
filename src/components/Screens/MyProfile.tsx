@@ -74,7 +74,7 @@ const MyProfileScreen: FC<{ route: any, navigation: any }> = ({ route, navigatio
                     <Text>Hi, {userData?.name || ""}</Text>
                 }
                 <View style={{ alignContent: "center", marginTop: 10 }} >
-                    <Badge>{userData?.posts.length || 0}</Badge>
+                    <Badge>{userData?.posts?.length || 0}</Badge>
                 </View>
 
                 <Text style={{ color: theme.colors.caption, fontSize: 11 }}>Posts Number</Text>

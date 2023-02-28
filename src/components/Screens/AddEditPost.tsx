@@ -15,8 +15,10 @@ interface Props {
     route: any;
 }
 
+const initPost = { text: '', image: '' };
+
 const AddEditPostScreen = ({ route }: Props) => {
-    const [post, setPost] = useState<Post>({ text: '', image: '' })
+    const [post, setPost] = useState<Post>({ ...initPost })
 
     const [errorMsg, setErrorMsg] = useState<string>('');
 
@@ -64,6 +66,7 @@ const AddEditPostScreen = ({ route }: Props) => {
     }
 
     const handleCreatePost = async () => {
+        console.log("!@!@")
         const res = await postApi.addNewPost({ text: post.text });
         const newPostData: Post | any = res.data;
         if (newPostData._id) {
@@ -150,7 +153,22 @@ const AddEditPostScreen = ({ route }: Props) => {
                     disabled={isLoading}
                 />
 
-                <View style={{ marginTop: 6 }} >
+                <View style={{ marginTop: 6, flexDirection: "row" }} >
+                    {existingPostId &&
+                        <Button
+                            onPress={() => {
+                                setPost({ ...initPost });
+                                setExistingPostId('');
+                            }}
+                            title="Cancel"
+                            disabled={isLoading}
+                            color={isLoading ? theme.colors.darkGrey : theme.colors.error}
+                            style={{
+                                marginLeft: 5,
+                                marginRight: 5,
+                            }}
+                        />
+                    }
                     <Button
                         title={existingPostId ? 'Edit Post' : 'Submit Post'}
                         onPress={handleSubmitPost}
